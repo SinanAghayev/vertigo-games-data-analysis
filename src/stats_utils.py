@@ -1,5 +1,6 @@
 from scipy.optimize import curve_fit
 import numpy as np
+import pandas as pd
 
 
 def retention_formula(day: int, a: float, b: float) -> float:
@@ -106,3 +107,19 @@ def calculate_total_revenue(
 def percentage_difference(a: float, b: float) -> float:
     """Calculate the percentage difference between two numbers"""
     return (b - a) / a * 100
+
+
+################ Task 2
+def calculate_retention(df: pd.DataFrame, day_number: int):
+    df["days_after_install"] = (df["event_date"] - df["install_date"]).dt.days
+
+    total_installs = df.groupby("install_date")["user_id"].nunique()
+    active_users = (
+        df[df["days_after_install"] == day_number]
+        .groupby("install_date")["user_id"]
+        .nunique()
+    )
+
+    retention = (active_users / total_installs) * 100
+    retention.dropna()
+    return retention

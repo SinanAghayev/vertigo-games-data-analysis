@@ -43,3 +43,31 @@ def show_retention_curve(
     plt.title("Exponential Retention Model")
     plt.legend()
     plt.show()
+
+
+def plot_data_bar(x_values, y_values, x_rotation=0):
+    plt.figure(figsize=(8, 6))
+
+    plt.bar(
+        x_values,
+        y_values,
+    )
+
+    plt.xticks(rotation=x_rotation)
+    plt.tight_layout()
+    plt.legend()
+    plt.show()
+
+
+def plot_data_line(x_values, y_values, x_rotation=0):
+    plt.figure(figsize=(8, 6))
+
+    plt.plot(
+        x_values,
+        y_values,
+    )
+
+    plt.xticks(rotation=x_rotation)
+    plt.tight_layout()
+    plt.legend()
+    plt.show()
