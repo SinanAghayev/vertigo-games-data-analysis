@@ -66,3 +66,36 @@ def calculate_daily_active_users(
         [retention_formula(day, a, b) for day in range(1, day_number + 1)]
     )
     return int(result)
+
+
+def calculate_total_revenue(
+    until_day: int,
+    dpr: float,
+    ecpm: float,
+    installs_per_day: int,
+    parameters: tuple[float, float],
+    AMSPP: float = 1,
+) -> float:
+    """Calculates total revenue
+
+    Args:
+        until_day (int): Number of days to simulate revenue for. Given day is excluded.
+        dpr (float): Daily purchase ratio, purchases / DAU
+        ecpm (float): Ad revenue per 1000 impression
+        installs_per_day (int): Number of installs per day
+        parameters (tuple[float, float]): Parameters for retention formula (a, b)
+        AMSPP (float, optional): Average money spent by players each day. Defaults to 1.
+
+    Returns:
+        float: Total revenue until 'until_day'
+    """
+    total_revenue = 0.0
+    for day in range(1, until_day):
+        dau = calculate_daily_active_users(day, installs_per_day, parameters)
+
+        ad_revenue_per_day = dau * ecpm / 1000
+        purchase_revenue_per_day = dpr * dau * AMSPP
+
+        total_revenue_per_day = ad_revenue_per_day + purchase_revenue_per_day
+        total_revenue += total_revenue_per_day
+    return total_revenue
