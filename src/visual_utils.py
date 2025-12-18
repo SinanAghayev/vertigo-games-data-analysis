@@ -45,7 +45,14 @@ def show_retention_curve(
     plt.show()
 
 
-def plot_data_bar(x_values, y_values, x_rotation=0):
+def plot_data_bar(x_values: list[any], y_values: list[any], x_rotation=0):
+    """Plots a bar chart with given x and y values
+
+    Args:
+        x_values (list): x-axis values
+        y_values (list): y-axis values
+        x_rotation (int, optional): Rotation for x values, mainly for dates. Defaults to 0.
+    """
     plt.figure(figsize=(8, 6))
 
     plt.bar(
@@ -60,6 +67,13 @@ def plot_data_bar(x_values, y_values, x_rotation=0):
 
 
 def plot_data_line(x_values, y_values, x_rotation=0):
+    """Plots a line chart with given x and y values
+
+    Args:
+        x_values (list): x-axis values
+        y_values (list): y-axis values
+        x_rotation (int, optional): Rotation for x values, mainly for dates. Defaults to 0.
+    """
     plt.figure(figsize=(8, 6))
 
     plt.plot(

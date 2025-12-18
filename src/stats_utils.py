@@ -110,10 +110,23 @@ def percentage_difference(a: float, b: float) -> float:
 
 
 ################ Task 2
-def calculate_retention(df: pd.DataFrame, day_number: int):
+
+
+def calculate_retention(df: pd.DataFrame, day_number: int) -> pd.Series[float]:
+    """Calculates retention for given pandas dataframe
+
+    Args:
+        df (pd.DataFrame): Dataframe that holds the data
+        day_number (int): Day number to calculate the retention for
+
+    Returns:
+        pd.Series[float]: A series object of retentions for install dates
+    """
     df["days_after_install"] = (df["event_date"] - df["install_date"]).dt.days
 
     total_installs = df.groupby("install_date")["user_id"].nunique()
+
+    # Active users after 'day_number' days
     active_users = (
         df[df["days_after_install"] == day_number]
         .groupby("install_date")["user_id"]
