@@ -101,3 +101,8 @@ def calculate_total_revenue(
         total_revenue_per_day = ad_revenue_per_day + purchase_revenue_per_day
         total_revenue += total_revenue_per_day
     return total_revenue
+
+
+def percentage_difference(a: float, b: float) -> float:
+    """Calculate the percentage difference between two numbers"""
+    return (b - a) / a * 100
