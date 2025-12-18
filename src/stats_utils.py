@@ -69,17 +69,19 @@ def calculate_daily_active_users(
 
 
 def calculate_total_revenue(
-    until_day: int,
+    start_day: int,
+    end_day: int,
     dpr: float,
     ecpm: float,
     installs_per_day: int,
     parameters: tuple[float, float],
     AMSPP: float = 1,
 ) -> float:
-    """Calculates total revenue
+    """Calculates total revenue between [start_day, end_day)
 
     Args:
-        until_day (int): Number of days to simulate revenue for. Given day is excluded.
+        start_day (int): Starting day of simulating the calculation.
+        end_day (int): Ending day of simulating the calculation. end_day is excluded.
         dpr (float): Daily purchase ratio, purchases / DAU
         ecpm (float): Ad revenue per 1000 impression
         installs_per_day (int): Number of installs per day
@@ -90,7 +92,7 @@ def calculate_total_revenue(
         float: Total revenue until 'until_day'
     """
     total_revenue = 0.0
-    for day in range(1, until_day):
+    for day in range(start_day, end_day):
         dau = calculate_daily_active_users(day, installs_per_day, parameters)
 
         ad_revenue_per_day = dau * ecpm / 1000
