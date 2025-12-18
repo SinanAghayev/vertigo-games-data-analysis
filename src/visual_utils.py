@@ -20,7 +20,13 @@ def show_retention_curve(
             R(d) = a * exp(-b * (d - 1))
         start_day (int, optional): Day the plotting of curve starts. Defaults to 1.
         end_day (int, optional): Day the plotting of curve ends. Defaults to 15.
+
+    Raises:
+        ValueError: If days and retentions have different lengths
+
     """
+    if len(original_days) != len(original_retentions):
+        raise ValueError("Days and retentions must have the same length!")
 
     days_to_show = np.array([i for i in range(start_day, end_day + 1)])
 
