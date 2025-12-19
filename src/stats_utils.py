@@ -112,7 +112,7 @@ def percentage_difference(a: float, b: float) -> float:
 ################ Task 2
 
 
-def calculate_retention(df: pd.DataFrame, day_number: int) -> pd.Series[float]:
+def calculate_retention(df: pd.DataFrame, day_number: int) -> pd.Series:
     """Calculates retention for given pandas dataframe
 
     Args:
@@ -134,5 +134,4 @@ def calculate_retention(df: pd.DataFrame, day_number: int) -> pd.Series[float]:
     )
 
     retention = (active_users / total_installs) * 100
-    retention.dropna()
-    return retention
+    return retention.dropna()
