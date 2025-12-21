@@ -66,22 +66,80 @@ def plot_data_bar(x_values: list[any], y_values: list[any], x_rotation=0):
     plt.show()
 
 
-def plot_data_line(x_values, y_values, x_rotation=0):
+def plot_data_line(
+    x_values: list,
+    y_values: list,
+    label: str = "",
+    x_rotation=0,
+    y_scale: str = "linear",
+    plot_title: str = "",
+):
     """Plots a line chart with given x and y values
 
     Args:
         x_values (list): x-axis values
         y_values (list): y-axis values
-        x_rotation (int, optional): Rotation for x values, mainly for dates. Defaults to 0.
+        label (str, optional): Label for the line. Defaults to "".
+        x_rotation (float, optional): Rotation for x values, mainly used for dates. Defaults to 0.
+        y_scale (str, optional): Scale of the plot. Defaults to "linear".
+        plot_title (str, optional): Title of the plot. Defaults to "".
     """
     plt.figure(figsize=(8, 6))
+    plt.title(plot_title)
 
     plt.plot(
         x_values,
         y_values,
+        label=label,
     )
 
     plt.xticks(rotation=x_rotation)
     plt.tight_layout()
+    plt.yscale(y_scale)
+    plt.legend()
+    plt.show()
+
+
+def plot_data_line_multiple(
+    multiple_x_values: list[list],
+    multiple_y_values: list[list],
+    labels: list[str] = [],
+    x_rotation: float = 0,
+    y_scale: str = "linear",
+    plot_title: str = "",
+):
+    """Plots line graph containing multiple lines with given x and y values
+        Example:
+            multiple_x_values = [[1, 2], [2, 3], [1, 2, 3, 4, 5]]
+            multiple_y_values = [[9, 10], [7, 2], [15, 17, 19, 10, 3]]
+            The function will match the arrays and plot the lines.
+            Length of lines may differ, but pairwise length of x and y values must be the same.
+
+    Args:
+        multiple_x_values (list[list]): list of x-axis values.
+        multiple_y_values (list[list]): y-axis values
+        labels (list[str], optional): Labels for the lines. Must be given for either all lines or none.
+        x_rotation (float, optional): Rotation for x values, mainly used for dates. Defaults to 0.
+        y_scale (str, optional): Scale of the plot. Defaults to "linear".
+        plot_title (str, optional): Title of the plot. Defaults to "".
+    """
+    if len(multiple_x_values) != len(multiple_y_values):
+        raise ValueError("Count of arrays to plot must be the same!")
+
+    if len(labels) not in [0, len(multiple_x_values)]:
+        raise ValueError("Label count must either be 0 or the same as plot count!")
+    labels = ["" * len(multiple_x_values)] if labels == [] else labels
+
+    plt.figure(figsize=(8, 6))
+    plt.title(plot_title)
+
+    for x_values, y_values, label in zip(multiple_x_values, multiple_y_values, labels):
+        if len(x_values) != len(y_values):
+            raise ValueError("Arrays for x and y values to be plotted must match!")
+        plt.plot(x_values, y_values, label=label)
+
+    plt.xticks(rotation=x_rotation)
+    plt.tight_layout()
+    plt.yscale(y_scale)
     plt.legend()
     plt.show()

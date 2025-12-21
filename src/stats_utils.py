@@ -122,7 +122,10 @@ def calculate_retention(df: pd.DataFrame, day_number: int) -> pd.Series:
     Returns:
         pd.Series[float]: A series object of retentions for install dates
     """
-    df["days_after_install"] = (df["event_date"] - df["install_date"]).dt.days
+    if "days_after_install" not in df.columns:
+        df.loc[:, "days_after_install"] = (
+            df["event_date"] - df["install_date"]
+        ).dt.days
 
     total_installs = df.groupby("install_date")["user_id"].nunique()
 
@@ -135,3 +138,16 @@ def calculate_retention(df: pd.DataFrame, day_number: int) -> pd.Series:
 
     retention = (active_users / total_installs) * 100
     return retention.dropna()
+
+
+def print_basic_stats(x: pd.Series, name="") -> None:
+    """Prints basic stats for given pandas series
+
+    Args:
+        x (pd.Series): Data source given in pandas structure series.
+        name (str, optional): The content of series, basically what the data is about. Defaults to "".
+    """
+    print(f"The basic stats {'for' if name != '' else ''} {name}")
+    print(
+        f"Min: {x.min()}, Max: {x.max()}, Median: {x.median()}, Count: {x.count()}, Sum: {x.sum()}, Mean: {x.mean()}, Std: {x.std()}\n"
+    )
