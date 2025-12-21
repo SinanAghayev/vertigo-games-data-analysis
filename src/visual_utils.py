@@ -1,4 +1,6 @@
+from typing import Callable
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from .stats_utils import retention_formula
 
@@ -43,6 +45,9 @@ def show_retention_curve(
     plt.title("Exponential Retention Model")
     plt.legend()
     plt.show()
+
+
+##### Task 2 #####
 
 
 def plot_data_bar(x_values: list[any], y_values: list[any], x_rotation=0):
@@ -108,11 +113,13 @@ def plot_data_line_multiple(
     y_scale: str = "linear",
     plot_title: str = "",
 ):
-    """Plots line graph containing multiple lines with given x and y values
+    """
+    Plots line graph containing multiple lines with given x and y values
+
         Example:
-            multiple_x_values = [[1, 2], [2, 3], [1, 2, 3, 4, 5]]
-            multiple_y_values = [[9, 10], [7, 2], [15, 17, 19, 10, 3]]
-            The function will match the arrays and plot the lines.
+            multiple_x_values = [[1, 2], [2, 3], [1, 2, 3, 4, 5]]\n
+            multiple_y_values = [[9, 10], [7, 2], [15, 17, 19, 10, 3]]\n
+            The function will match the arrays and plot the lines.\n
             Length of lines may differ, but pairwise length of x and y values must be the same.
 
     Args:
@@ -128,7 +135,7 @@ def plot_data_line_multiple(
 
     if len(labels) not in [0, len(multiple_x_values)]:
         raise ValueError("Label count must either be 0 or the same as plot count!")
-    labels = ["" * len(multiple_x_values)] if labels == [] else labels
+    labels = [i + 1 for i in range(len(multiple_x_values))] if labels == [] else labels
 
     plt.figure(figsize=(8, 6))
     plt.title(plot_title)
@@ -143,3 +150,38 @@ def plot_data_line_multiple(
     plt.yscale(y_scale)
     plt.legend()
     plt.show()
+
+
+def plot_by_segment(
+    df: pd.DataFrame,
+    segments: list[str],
+    segment_column: str,
+    compute_series: Callable[[pd.DataFrame], pd.Series],
+    title: str = "",
+    x_rotation: float = 45,
+):
+    """Plots line graphs by segments for data in dataframe with given function
+
+    Args:
+        df (pd.DataFrame): Dataframe that holds the data.
+        segments (list[str]): Segments to draw the lines for.
+        segment_column (str): Name of the column the segments are kept.
+        compute_series (Callable[[pd.DataFrame], pd.Series]):
+            Function to use to find processed data.
+            The function has to have dataframe as input and return series.
+        title (str, optional): Title of the plot. Defaults to "".
+        x_rotation (float, optional): Rotation for x values, mainly used for dates. Defaults to 45.
+    """
+    x_values_list, y_values_list, labels = [], [], []
+    for segment in segments:
+        segment_df = df[df[segment_column] == segment]
+
+        processed_series = compute_series(segment_df)
+
+        x_values_list.append(processed_series.index)
+        y_values_list.append(processed_series.values)
+        labels.append(segment)
+
+    plot_data_line_multiple(
+        x_values_list, y_values_list, labels, x_rotation, plot_title=title
+    )

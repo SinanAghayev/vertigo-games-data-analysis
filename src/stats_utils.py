@@ -1,3 +1,4 @@
+from typing import Callable, Union
 from scipy.optimize import curve_fit
 import numpy as np
 import pandas as pd
@@ -151,3 +152,25 @@ def print_basic_stats(x: pd.Series, name="") -> None:
     print(
         f"Min: {x.min()}, Max: {x.max()}, Median: {x.median()}, Count: {x.count()}, Sum: {x.sum()}, Mean: {x.mean()}, Std: {x.std()}\n"
     )
+
+
+def find_best_performing_countries(
+    df: pd.DataFrame,
+    column: str,
+    country_count: int,
+    f: Union[str, Callable[[pd.Series], float]],
+) -> list[str]:
+    """Finds and returns the names of best performing countries depending on the column and function.
+
+    Args:
+        df (pd.DataFrame): Dataframe to work on.
+        column (str): Column to compare the countries on.
+        country_count (int): Number of countries to return.
+        f (str): The function to aggregate the values on column.
+
+    Returns:
+        list[str]: Names of best performing countries in a list.
+    """
+    best_performing_countries = df.groupby("country")[column].agg(f)
+    best_performing_countries = best_performing_countries.sort_values(ascending=False)
+    return best_performing_countries.head(country_count).index.tolist()
