@@ -11,6 +11,7 @@ def show_retention_curve(
     parameters: tuple[float, float],
     start_day: int = 1,
     end_day: int = 15,
+    name: str = "",
 ):
     """Plots given retentions and fitted curve and shows them
 
@@ -22,6 +23,7 @@ def show_retention_curve(
             R(d) = a * exp(-b * (d - 1))
         start_day (int, optional): Day the plotting of curve starts. Defaults to 1.
         end_day (int, optional): Day the plotting of curve ends. Defaults to 15.
+        name (str, optional): Name of the plot. Defaults to "".
 
     Raises:
         ValueError: If days and retentions have different lengths
@@ -42,7 +44,7 @@ def show_retention_curve(
 
     plt.xlabel("Days")
     plt.ylabel("Retention")
-    plt.title("Exponential Retention Model")
+    plt.title("Exponential Retention Model for " + name)
     plt.legend()
     plt.show()
 
